@@ -13,14 +13,18 @@ import javafx.beans.property.StringProperty;
  * @author ACER
  */
 public class Pendaftaran {
-    IntegerProperty ID;
-    Pengguna pengguna;
-    Lomba lomba;
+    IntegerProperty ID; //int
+    Pengguna pengguna; //objek dari class pengguna
+    Lomba lomba; //objek dari class lomba
     
     public Pendaftaran (int ID, Pengguna pengguna, Lomba lomba){
         this.ID = new SimpleIntegerProperty (ID);
         this.pengguna = pengguna;
         this.lomba = lomba;
+    }
+    
+    public int getID(){
+        return this.ID.get();
     }
     
     public IntegerProperty IDProperty(){
