@@ -13,14 +13,17 @@ import javafx.beans.property.StringProperty;
  *
  * @author ACER
  */
+
 public class PUBG extends Lomba {
     StringProperty nama;
     IntegerProperty Harga;
     
     public PUBG (String nama) {
         super(nama);
+        super.setID(1);
         this.nama = new SimpleStringProperty (nama);
         this.Harga = new SimpleIntegerProperty (150000);
+        super.setHarga(this.Harga.get());
     }
     
     @Override
