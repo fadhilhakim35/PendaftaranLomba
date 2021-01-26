@@ -4,7 +4,9 @@
  */
 package pendaftaranlomba;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,22 +24,27 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-/**
- *
- * @author ACER
- */
 public class Main extends Application {
     
-    TableView tab = new TableView();
-    ObservableList Data = FXCollections.observableArrayList();
-    TextField Nama = new TextField();
+    TableView tab = new TableView(); //tampilan tabel
+    ObservableList<Pendaftaran> Data = FXCollections.observableArrayList(); //isi data
+    TextField Nama = new TextField(); 
     TextField Alamat = new TextField();
     TextField no_hp = new TextField();
     ComboBox Lomba = new ComboBox();
-    int id = 1;
+    PendaftaranLombaDataModel pldm;
+    Pendaftaran pdf;
+    int id = 0;
     
     @Override
     public void start(Stage primaryStage) {
+        try {
+            pldm = new PendaftaranLombaDataModel ("MYSQL");
+            Data = pldm.getData();
+        } catch (SQLException ex) {
+            System.out.println("Koneksi GAGAL");
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         Label judul = new Label();
         judul.setText("E-SPORT COMPETITION LAMPUNG");
@@ -59,19 +66,28 @@ public class Main extends Application {
     
             @Override
             public void handle(ActionEvent event) {
+                try {
+                    id = pldm.ID();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 if (Lomba.getValue().toString().equals("PUBG")){
-                    Data.add(new Pendaftaran(id,
+                    pdf = new Pendaftaran(id,
                             new Pengguna(Nama.getText(),Alamat.getText(),no_hp.getText()),
-                            new PUBG(Lomba.getValue().toString()))
-                            );
-                    id = id+1;
+                            new PUBG(Lomba.getValue().toString()));
+                    Data.add(pdf);
                 }
                 else if (Lomba.getValue().toString().equals("Mobile Legend")){
-                    Data.add(new Pendaftaran(id,
+                    pdf = new Pendaftaran(id,
                             new Pengguna(Nama.getText(),Alamat.getText(),no_hp.getText()),
-                            new MobileLegend(Lomba.getValue().toString()))
+                            new MobileLegend(Lomba.getValue().toString())
                             );
-                    id = id+1;
+                    Data.add(pdf);
+                }
+                try {
+                    pldm.inputData(pdf);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 Nama.clear();
                 Alamat.clear();
@@ -102,6 +118,7 @@ public class Main extends Application {
         VBox Btabel = new VBox();
         VBox Bform = new VBox(10);
         GridPane root = new GridPane();
+        root.setHgap(10);
         root.add(Btabel, 0, 0,1,1);
         Btabel.getChildren().add(tab);
         root.add(Bform, 1, 0,1,1);
