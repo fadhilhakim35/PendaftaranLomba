@@ -4,9 +4,7 @@
 
 
 M.Fadhil Hakim 1957051014
-
 Devi Ramadhia Fitri 1917051005
-
 Sendy Pramita 1917051030
 
 Untuk pembagian tugas Final Project dikerjakan bersama-sama
